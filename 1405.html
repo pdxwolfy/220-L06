@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <title>title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+
+      .text-field {
+        border: solid 1px #ccc;
+        padding: 1em;
+        cursor: pointer;
+        font-family: sans-serif;
+        font-size: 18px;
+        overflow: hidden;
+        width: 300px;
+      }
+
+      .text-field .content {
+        display: inline-block;
+        height: 21px;
+        float: left;
+        white-space: pre;
+      }
+
+      .text-field.focused {
+        border-color: black;
+      }
+
+      .text-field.focused .content {
+
+      }
+
+      .text-field.cursor .content {
+        border-right: solid 2px black;
+      }
+
+    </style>
+  </head>
+
+  <body>
+
+    <div class="text-field">
+      <div class="content"></div>
+    </div>
+
+    <script>
+      "use script";
+
+      var textField = null;
+      var focusedTextField = null;
+      var intervalId = null;
+
+      function createInterval(event) {
+        event.stopPropagation();
+
+        function toggleCursor() {
+          if (textField.classList.contains("cursor")) {
+            textField.classList.remove("cursor");
+          } else {
+            textField.classList.add("cursor");
+          }
+        }
+
+        intervalId = intervalId || setInterval(toggleCursor, 500);
+      }
+
+      function removeInterval() {
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = undefined;
+          textField.classList.remove("cursor");
+        }
+      }
+
+      document.addEventListener(
+        "DOMContentLoaded",
+        function onReady(_readyEvent) {
+          textField = document.querySelector(".text-field");
+
+          textField.addEventListener("click", function setFocused(event) {
+            event.stopPropagation();
+            textField.classList.add("focused");
+            focusedTextField = textField;
+          });
+
+          textField.addEventListener("click", createInterval);
+        }
+      );
+
+      document.addEventListener("click", function removeFocused(_event) {
+        textField.classList.remove("focused");
+        focusedTextField = null;
+        removeInterval();
+      });
+
+      document.addEventListener("keydown", function keyboardHandler(event) {
+        event.stopPropagation();
+        if (textField.classList.contains("focused")) {
+          textField.textContent += event.key;
+        }
+      });
+    </script>
+  </body>
+</html>

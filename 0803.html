@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <title>title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .x {
+        position: absolute;
+        transform: rotate(45deg);
+        top: 20px;
+        left: 20px;
+      }
+
+      .x .horizontal {
+        width: 45px;
+        height: 5px;
+        position: absolute;
+        left: -20px;
+        background: red;
+      }
+
+      .x .vertical {
+        height: 45px;
+        width: 5px;
+        background: red;
+        position: absolute;
+        left: 0px;
+        top: -20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="x">
+      <div class="horizontal"></div>
+      <div class="vertical"></div>
+    </div>
+    <script>
+
+      "use strict";
+
+      function pixelsAsString(pixels) {
+        return pixels.toString() + "px";
+      }
+
+      document.addEventListener("DOMContentLoaded", function start() {
+        var xElement   = document.querySelector(".x");
+        var horizontal = document.querySelector(".horizontal");
+        var vertical   = document.querySelector(".vertical");
+
+        document.addEventListener("mousemove", function mouseHandler(event) {
+          xElement.style.left = pixelsAsString(event.clientX);
+          xElement.style.top = pixelsAsString(event.clientY);
+        });
+
+        document.addEventListener("keypress", function keyHandler(event) {
+          var color = horizontal.style.backgroundColor;
+          var key = event.key.toLowerCase();
+          if (key === "r") {
+            color = "red";
+          } else if (key === "g") {
+            color = "green";
+          } else if (key === "b") {
+            color = "blue";
+          }
+
+          horizontal.style.backgroundColor = color;
+          vertical.style.backgroundColor = color;
+        });
+      });
+
+    </script>
+  </body>
+</html>
